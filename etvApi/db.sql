@@ -158,7 +158,9 @@ insert into marca values('marca 2',1),('marca 3',1),('marca 4',1),
 ('marca 5',1),('marca 6',1),('marca 7',1),('marca 8',1),('marca 9',1),
 ('marca 10',1),('marca 11',1),('marca 12',1),('marca 13',1),('marca 14',1)
 
-select * from ub
+select * from rol
 
+select * from usuario
 select * from persona
+insert into usuario values (1,'pepe','123',2,1,1)
 
