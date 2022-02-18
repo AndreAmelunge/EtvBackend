@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using etvApi.Models;
+using etvApi.DTOS;
 
 namespace etvApi.Controllers
 {
@@ -18,33 +19,40 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Persona>>> Get()
         {
-            var data = await _context.Personas.ToListAsync();
+            var data = await _context.Personas.Include(q => q.IdCargoNavigation).ToListAsync();
             return data;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Persona persona)
+        public async Task<ActionResult> Post(PersonaDTO persona)
         {
-            _context.Personas.Add(persona);
+            var obj = new Persona
+            {
+                Nombre = persona.Nombre,
+                APaterno = persona.APaterno,
+                AMaterno = persona.AMaterno,
+                Estado = true,
+                IdCargo = persona.IdCargo
+            };
+            _context.Personas.Add(obj);
             await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Persona persona)
+        public async Task<ActionResult> Put(int id, [FromBody] PersonaDTO persona)
         {
-            if (persona.IdPersona != id)
-            {
-                return BadRequest("El id del Persona no coincide con el id de la URL");
-            }
-
-            var existe = await _context.Personas.AnyAsync(x => x.IdPersona == id);
-            if (!existe)
+            var existe = await _context.Personas.FirstOrDefaultAsync(x => x.IdPersona == id);
+            if (existe == null)
             {
                 return NotFound();
             }
 
-            _context.Update(persona);
+            existe.Nombre = persona.Nombre;
+            existe.APaterno = persona.APaterno;
+            existe.AMaterno = persona.AMaterno;
+            existe.IdCargo = persona.IdCargo;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

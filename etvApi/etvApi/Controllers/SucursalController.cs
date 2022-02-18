@@ -40,11 +40,6 @@ namespace etvApi.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int id, [FromBody] Sucursal sucursal)
         {
-            if (sucursal.IdSucursal != id)
-            {
-                return BadRequest("El id del Sucursal no coincide con el id de la URL");
-            }
-
             var existe = await _context.Sucursals.AnyAsync(x => x.IdSucursal == id);
             if (!existe)
             {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using etvApi.Models;
+using etvApi.DTOS;
 
 namespace etvApi.Controllers
 {
@@ -18,33 +19,47 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Ub>>> Get()
         {
-            var data = await _context.Ubs.ToListAsync();
+            var data = await _context.Ubs
+                .Include(q => q.IdTipoUbNavigation)
+                .Include(q => q.IdBlindadorNavigation)
+                .Include(q => q.IdModeloNavigation)
+                .Include(q => q.EstadoUbNavigation).ToListAsync();
             return data;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Ub ub)
+        public async Task<ActionResult> Post(UbDTO ub)
         {
-            _context.Ubs.Add(ub);
+            Ub obj = new Ub();
+            obj.Codigo = ub.Codigo;
+            obj.Placa = ub.Placa;
+            obj.TarjetaOperativa = ub.TarjetaOperativa;
+            obj.IdTipoUb = ub.IdTipoUb;
+            obj.Ano = ub.Ano;
+            obj.IdBlindador = ub.IdBlindador;
+            obj.IdModelo = ub.IdModelo;
+            obj.EstadoUb = ub.EstadoUb;
+            _context.Ubs.Add(obj);
             await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Ub ub)
+        public async Task<ActionResult> Put(int id, [FromBody] UbDTO ub)
         {
-            if (ub.IdUb != id)
-            {
-                return BadRequest("El id del Ub no coincide con el id de la URL");
-            }
-
-            var existe = await _context.Ubs.AnyAsync(x => x.IdUb == id);
-            if (!existe)
-            {
+            var existe = await _context.Ubs.FirstOrDefaultAsync(x => x.IdUb == id);
+            if (existe == null)
                 return NotFound();
-            }
 
-            _context.Update(ub);
+            existe.Codigo = ub.Codigo;
+            existe.Placa = ub.Placa;
+            existe.TarjetaOperativa = ub.TarjetaOperativa;
+            existe.IdTipoUb = ub.IdTipoUb;
+            existe.Ano = ub.Ano;
+            existe.IdBlindador = ub.IdBlindador;
+            existe.IdModelo = ub.IdModelo;
+            existe.EstadoUb = ub.EstadoUb;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

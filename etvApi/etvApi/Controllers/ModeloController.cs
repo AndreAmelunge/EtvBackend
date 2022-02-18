@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using etvApi.Models;
+using etvApi.DTOS;
 
 namespace etvApi.Controllers
 {
@@ -18,33 +19,33 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Modelo>>> Get()
         {
-            var data = await _context.Modelos.ToListAsync();
-            return data;
+            return await _context.Modelos.Include(q => q.IdMarcaNavigation).ToListAsync();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Modelo modelo)
+        public async Task<ActionResult> Post(ModeloDTO modelo)
         {
-            _context.Modelos.Add(modelo);
+            var obj = new Modelo
+            {
+                Nombre = modelo.Nombre,
+                Estado = true,
+                IdMarca = modelo.IdMarca
+            };
+            _context.Modelos.Add(obj);
             await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Modelo modelo)
+        public async Task<ActionResult> Put(int id, [FromBody] ModeloDTO modelo)
         {
-            if (modelo.IdModelo != id)
-            {
-                return BadRequest("El id del modelo no coincide con el id de la URL");
-            }
-
-            var existe = await _context.Modelos.AnyAsync(x => x.IdModelo == id);
-            if (!existe)
-            {
+            var existe = await _context.Modelos.FirstOrDefaultAsync(x => x.IdModelo == id);
+            if (existe == null)
                 return NotFound();
-            }
 
-            _context.Update(modelo);
+            existe.Nombre = modelo.Nombre;
+            existe.IdMarca = modelo.IdMarca;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

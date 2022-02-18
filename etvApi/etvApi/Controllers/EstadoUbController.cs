@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using etvApi.Models;
+using etvApi.DTOS;
 
 namespace etvApi.Controllers
 {
     [ApiController]
     [Route("api/EstadoUbs")]
-    public class EstadoUbController
+    public class EstadoUbController: ControllerBase
     {
         private readonly etvContext _context;
 
@@ -24,7 +25,7 @@ namespace etvApi.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Post(EstadoUb estadoUb)
-        {
+        {    
             _context.EstadoUbs.Add(estadoUb);
             await _context.SaveChangesAsync();
             return Ok();
@@ -49,16 +50,6 @@ namespace etvApi.Controllers
             return Ok();
         }
 
-        private ActionResult BadRequest(string v)
-        {
-            throw new NotImplementedException();
-        }
-
-        private ActionResult NotFound()
-        {
-            throw new NotImplementedException();
-        }
-
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -70,11 +61,6 @@ namespace etvApi.Controllers
             _context.Remove(new EstadoUb() { IdEstadoUb = id });
             await _context.SaveChangesAsync();
             return Ok();
-        }
-
-        private ActionResult Ok()
-        {
-            throw new NotImplementedException();
         }
     }
 }
