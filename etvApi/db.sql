@@ -32,30 +32,6 @@ estado bit not null,
 primary key (idRol)
 )
 
-Create table usuario(
-idUsuario int identity(1,1) not null,
-nombre nvarchar(50) not null,
-contrasena nvarchar(250) not null,
-idRol int not null,
-estado bit not null,
-foreign key (idrol) references rol (idrol),
-primary key (idUsuario)
-)
-
-create table permiso(
-idPermiso int identity(1,1) not null,
-nombre nvarchar(50),
-primary key (idPermiso)
-)
-
-create table permiso_rol(
-idPermisoRol int identity(1,1) not null,
-idPermiso int not null references permiso (idPermiso),
-idRol int not null,
-primary key (idPermisoRol),
-foreign key (idrol) references rol (idrol)
-)
-
 create table sucursal(
 idSucursal int identity (1,1) not null,
 nombre nvarchar(20)not null,
@@ -63,6 +39,35 @@ sigla nvarchar(4)not null,
 estado bit not null,
 primary key (idSucursal)
 )
+
+Create table usuario(
+idPersona int not null,
+nombre nvarchar(50) not null,
+contrasena nvarchar(250) not null,
+idRol int not null,
+idSucursal int not null,
+estado bit not null,
+primary key (idPersona),
+foreign key (idPersona) references Persona (idPersona),
+foreign key (idrol) references rol (idrol),
+foreign key (idSucursal) references sucursal (idSucursal),
+)
+
+--create table permiso(
+--idPermiso int identity(1,1) not null,
+--nombre nvarchar(50),
+--primary key (idPermiso)
+--)
+
+--create table permiso_rol(
+--idPermisoRol int identity(1,1) not null,
+--idPermiso int not null references permiso (idPermiso),
+--idRol int not null,
+--primary key (idPermisoRol),
+--foreign key (idrol) references rol (idrol)
+--)
+
+
 
 create table estadoUb(
 idEstadoUb int identity (1,1) not null,
@@ -138,13 +143,12 @@ foreign key (idPersona) references persona (idPersona)
 )
 
 create table otDetalle(
-idOtDetalle int identity (1,1) not null,
+idOt int identity (1,1) not null,
 trabajoSolicitado nvarchar(50)not null,
 descripcion nvarchar(400) null,
 precio money not null,
-idOt int not null,
 idUb int not null,
-primary key (idOtDetalle),
+primary key (idOt),
 foreign key (idOt) references ot (idOt),
 foreign key (idUb) references ub (idUb),
 )
@@ -155,5 +159,6 @@ insert into marca values('marca 2',1),('marca 3',1),('marca 4',1),
 ('marca 10',1),('marca 11',1),('marca 12',1),('marca 13',1),('marca 14',1)
 
 select * from ub
-insert into ub values ('123','1234','123',1,'2022',1,1,1)
+
+select * from persona
 
