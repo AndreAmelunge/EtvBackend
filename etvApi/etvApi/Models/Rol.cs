@@ -7,7 +7,6 @@ namespace etvApi.Models
     {
         public Rol()
         {
-            PermisoRols = new HashSet<PermisoRol>();
             Usuarios = new HashSet<Usuario>();
         }
 
@@ -15,7 +14,6 @@ namespace etvApi.Models
         public string Nombre { get; set; } = null!;
         public bool Estado { get; set; }
 
-        public virtual ICollection<PermisoRol> PermisoRols { get; set; }
         public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }

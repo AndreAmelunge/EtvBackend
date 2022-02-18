@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using etvApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace etvApi.Models
+namespace etvApi.Data
 {
     public partial class etvContext : DbContext
     {
@@ -23,8 +24,6 @@ namespace etvApi.Models
         public virtual DbSet<Modelo> Modelos { get; set; } = null!;
         public virtual DbSet<Ot> Ots { get; set; } = null!;
         public virtual DbSet<OtDetalle> OtDetalles { get; set; } = null!;
-        public virtual DbSet<Permiso> Permisos { get; set; } = null!;
-        public virtual DbSet<PermisoRol> PermisoRols { get; set; } = null!;
         public virtual DbSet<Persona> Personas { get; set; } = null!;
         public virtual DbSet<Rol> Rols { get; set; } = null!;
         public virtual DbSet<Sucursal> Sucursals { get; set; } = null!;
@@ -47,7 +46,7 @@ namespace etvApi.Models
             modelBuilder.Entity<Blindador>(entity =>
             {
                 entity.HasKey(e => e.IdBlindador)
-                    .HasName("PK__blindado__69434C1EDC9CDDDD");
+                    .HasName("PK__blindado__69434C1E4CC90986");
 
                 entity.ToTable("blindador");
 
@@ -63,7 +62,7 @@ namespace etvApi.Models
             modelBuilder.Entity<Cargo>(entity =>
             {
                 entity.HasKey(e => e.IdCargo)
-                    .HasName("PK__cargo__3D0E29B8F5717DDA");
+                    .HasName("PK__cargo__3D0E29B8D634816C");
 
                 entity.ToTable("cargo");
 
@@ -79,7 +78,7 @@ namespace etvApi.Models
             modelBuilder.Entity<EstadoUb>(entity =>
             {
                 entity.HasKey(e => e.IdEstadoUb)
-                    .HasName("PK__estadoUb__8F93987849AFB539");
+                    .HasName("PK__estadoUb__8F9398781B9B6288");
 
                 entity.ToTable("estadoUb");
 
@@ -93,7 +92,7 @@ namespace etvApi.Models
             modelBuilder.Entity<Marca>(entity =>
             {
                 entity.HasKey(e => e.IdMarca)
-                    .HasName("PK__marca__70331812596766AC");
+                    .HasName("PK__marca__703318122DA35877");
 
                 entity.ToTable("marca");
 
@@ -109,7 +108,7 @@ namespace etvApi.Models
             modelBuilder.Entity<Modelo>(entity =>
             {
                 entity.HasKey(e => e.IdModelo)
-                    .HasName("PK__modelo__13A52CD13CE1893D");
+                    .HasName("PK__modelo__13A52CD12ACBA692");
 
                 entity.ToTable("modelo");
 
@@ -127,13 +126,13 @@ namespace etvApi.Models
                     .WithMany(p => p.Modelos)
                     .HasForeignKey(d => d.IdMarca)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__modelo__idMarca__440B1D61");
+                    .HasConstraintName("FK__modelo__idMarca__48CFD27E");
             });
 
             modelBuilder.Entity<Ot>(entity =>
             {
                 entity.HasKey(e => e.IdOt)
-                    .HasName("PK__ot__9DB850DD309F11E6");
+                    .HasName("PK__ot__9DB850DD033795B0");
 
                 entity.ToTable("ot");
 
@@ -161,35 +160,35 @@ namespace etvApi.Models
                     .WithMany(p => p.Ots)
                     .HasForeignKey(d => d.IdPersona)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ot__idPersona__5BE2A6F2");
+                    .HasConstraintName("FK__ot__idPersona__59063A47");
 
                 entity.HasOne(d => d.IdSucursalNavigation)
                     .WithMany(p => p.Ots)
                     .HasForeignKey(d => d.IdSucursal)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ot__idSucursal__59FA5E80");
+                    .HasConstraintName("FK__ot__idSucursal__571DF1D5");
 
                 entity.HasOne(d => d.IdTipoTrabajoNavigation)
                     .WithMany(p => p.Ots)
                     .HasForeignKey(d => d.IdTipoTrabajo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ot__idTipoTrabaj__5AEE82B9");
+                    .HasConstraintName("FK__ot__idTipoTrabaj__5812160E");
             });
 
             modelBuilder.Entity<OtDetalle>(entity =>
             {
-                entity.HasKey(e => e.IdOtDetalle)
-                    .HasName("PK__otDetall__03567D495D5F8E48");
+                entity.HasKey(e => e.IdOt)
+                    .HasName("PK__otDetall__9DB850DDDDA33471");
 
                 entity.ToTable("otDetalle");
 
-                entity.Property(e => e.IdOtDetalle).HasColumnName("idOtDetalle");
+                entity.Property(e => e.IdOt)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("idOt");
 
                 entity.Property(e => e.Descripcion)
                     .HasMaxLength(400)
                     .HasColumnName("descripcion");
-
-                entity.Property(e => e.IdOt).HasColumnName("idOt");
 
                 entity.Property(e => e.IdUb).HasColumnName("idUb");
 
@@ -202,62 +201,22 @@ namespace etvApi.Models
                     .HasColumnName("trabajoSolicitado");
 
                 entity.HasOne(d => d.IdOtNavigation)
-                    .WithMany(p => p.OtDetalles)
-                    .HasForeignKey(d => d.IdOt)
+                    .WithOne(p => p.OtDetalle)
+                    .HasForeignKey<OtDetalle>(d => d.IdOt)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__otDetalle__idOt__5EBF139D");
+                    .HasConstraintName("FK__otDetalle__idOt__5BE2A6F2");
 
                 entity.HasOne(d => d.IdUbNavigation)
                     .WithMany(p => p.OtDetalles)
                     .HasForeignKey(d => d.IdUb)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__otDetalle__idUb__5FB337D6");
-            });
-
-            modelBuilder.Entity<Permiso>(entity =>
-            {
-                entity.HasKey(e => e.IdPermiso)
-                    .HasName("PK__permiso__06A584866CC9570F");
-
-                entity.ToTable("permiso");
-
-                entity.Property(e => e.IdPermiso).HasColumnName("idPermiso");
-
-                entity.Property(e => e.Nombre)
-                    .HasMaxLength(50)
-                    .HasColumnName("nombre");
-            });
-
-            modelBuilder.Entity<PermisoRol>(entity =>
-            {
-                entity.HasKey(e => e.IdPermisoRol)
-                    .HasName("PK__permiso___BBE208F9FA51CF67");
-
-                entity.ToTable("permiso_rol");
-
-                entity.Property(e => e.IdPermisoRol).HasColumnName("idPermisoRol");
-
-                entity.Property(e => e.IdPermiso).HasColumnName("idPermiso");
-
-                entity.Property(e => e.IdRol).HasColumnName("idRol");
-
-                entity.HasOne(d => d.IdPermisoNavigation)
-                    .WithMany(p => p.PermisoRols)
-                    .HasForeignKey(d => d.IdPermiso)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__permiso_r__idPer__300424B4");
-
-                entity.HasOne(d => d.IdRolNavigation)
-                    .WithMany(p => p.PermisoRols)
-                    .HasForeignKey(d => d.IdRol)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__permiso_r__idRol__30F848ED");
+                    .HasConstraintName("FK__otDetalle__idUb__5CD6CB2B");
             });
 
             modelBuilder.Entity<Persona>(entity =>
             {
                 entity.HasKey(e => e.IdPersona)
-                    .HasName("PK__persona__A4788141EB22000B");
+                    .HasName("PK__persona__A47881419AE3F425");
 
                 entity.ToTable("persona");
 
@@ -283,13 +242,13 @@ namespace etvApi.Models
                     .WithMany(p => p.Personas)
                     .HasForeignKey(d => d.IdCargo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__persona__idCargo__267ABA7A");
+                    .HasConstraintName("FK__persona__idCargo__398D8EEE");
             });
 
             modelBuilder.Entity<Rol>(entity =>
             {
                 entity.HasKey(e => e.IdRol)
-                    .HasName("PK__rol__3C872F760DC08F28");
+                    .HasName("PK__rol__3C872F76F0E8F5F5");
 
                 entity.ToTable("rol");
 
@@ -303,7 +262,7 @@ namespace etvApi.Models
             modelBuilder.Entity<Sucursal>(entity =>
             {
                 entity.HasKey(e => e.IdSucursal)
-                    .HasName("PK__sucursal__F707694C4BC61FBB");
+                    .HasName("PK__sucursal__F707694C616CE55B");
 
                 entity.ToTable("sucursal");
 
@@ -323,7 +282,7 @@ namespace etvApi.Models
             modelBuilder.Entity<TipoTrabajo>(entity =>
             {
                 entity.HasKey(e => e.IdTipoTrabajo)
-                    .HasName("PK__tipoTrab__4893AC7193F61CD7");
+                    .HasName("PK__tipoTrab__4893AC715C2D46B7");
 
                 entity.ToTable("tipoTrabajo");
 
@@ -337,7 +296,7 @@ namespace etvApi.Models
             modelBuilder.Entity<TipoUb>(entity =>
             {
                 entity.HasKey(e => e.IdTipoUb)
-                    .HasName("PK__tipoUb__13ED3341DD665286");
+                    .HasName("PK__tipoUb__13ED3341331B05B3");
 
                 entity.ToTable("tipoUb");
 
@@ -353,7 +312,7 @@ namespace etvApi.Models
             modelBuilder.Entity<Ub>(entity =>
             {
                 entity.HasKey(e => e.IdUb)
-                    .HasName("PK__ub__9DB800333857B004");
+                    .HasName("PK__ub__9DB8003328928078");
 
                 entity.ToTable("ub");
 
@@ -387,37 +346,37 @@ namespace etvApi.Models
                     .WithMany(p => p.Ubs)
                     .HasForeignKey(d => d.EstadoUb)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ub__estadoUb__52593CB8");
+                    .HasConstraintName("FK__ub__estadoUb__4F7CD00D");
 
                 entity.HasOne(d => d.IdBlindadorNavigation)
                     .WithMany(p => p.Ubs)
                     .HasForeignKey(d => d.IdBlindador)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ub__idBlindador__534D60F1");
+                    .HasConstraintName("FK__ub__idBlindador__5070F446");
 
                 entity.HasOne(d => d.IdModeloNavigation)
                     .WithMany(p => p.Ubs)
                     .HasForeignKey(d => d.IdModelo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ub__idModelo__5441852A");
+                    .HasConstraintName("FK__ub__idModelo__5165187F");
 
                 entity.HasOne(d => d.IdTipoUbNavigation)
                     .WithMany(p => p.Ubs)
                     .HasForeignKey(d => d.IdTipoUb)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ub__idTipoUb__5535A963");
+                    .HasConstraintName("FK__ub__idTipoUb__52593CB8");
             });
 
             modelBuilder.Entity<Usuario>(entity =>
             {
-                entity.HasKey(e => e.IdUsuario)
-                    .HasName("PK__usuario__645723A6BB40260F");
+                entity.HasKey(e => e.IdPersona)
+                    .HasName("PK__usuario__A478814189D9677B");
 
                 entity.ToTable("usuario");
 
-                entity.Property(e => e.IdUsuario)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("idUsuario");
+                entity.Property(e => e.IdPersona)
+                    .ValueGeneratedNever()
+                    .HasColumnName("idPersona");
 
                 entity.Property(e => e.Contrasena)
                     .HasMaxLength(250)
@@ -427,21 +386,29 @@ namespace etvApi.Models
 
                 entity.Property(e => e.IdRol).HasColumnName("idRol");
 
+                entity.Property(e => e.IdSucursal).HasColumnName("idSucursal");
+
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(50)
                     .HasColumnName("nombre");
+
+                entity.HasOne(d => d.IdPersonaNavigation)
+                    .WithOne(p => p.Usuario)
+                    .HasForeignKey<Usuario>(d => d.IdPersona)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__usuario__idPerso__403A8C7D");
 
                 entity.HasOne(d => d.IdRolNavigation)
                     .WithMany(p => p.Usuarios)
                     .HasForeignKey(d => d.IdRol)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__usuario__idRol__2B3F6F97");
+                    .HasConstraintName("FK__usuario__idRol__412EB0B6");
 
-                entity.HasOne(d => d.IdUsuarioNavigation)
-                    .WithOne(p => p.Usuario)
-                    .HasForeignKey<Usuario>(d => d.IdUsuario)
+                entity.HasOne(d => d.IdSucursalNavigation)
+                    .WithMany(p => p.Usuarios)
+                    .HasForeignKey(d => d.IdSucursal)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_usuario_persona");
+                    .HasConstraintName("FK__usuario__idSucur__4222D4EF");
             });
 
             OnModelCreatingPartial(modelBuilder);

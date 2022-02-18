@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using etvApi.Data;
 using etvApi.Models;
-using etvApi.DTOS;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace etvApi.Controllers
 {
     [ApiController]
     [Route("api/EstadoUbs")]
-    public class EstadoUbController: ControllerBase
+    public class EstadoUbController : ControllerBase
     {
         private readonly etvContext _context;
 
@@ -25,7 +25,7 @@ namespace etvApi.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Post(EstadoUb estadoUb)
-        {    
+        {
             _context.EstadoUbs.Add(estadoUb);
             await _context.SaveChangesAsync();
             return Ok();

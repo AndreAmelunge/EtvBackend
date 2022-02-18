@@ -4,6 +4,7 @@ using etvApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using etvApi.Data;
 
 namespace etvApi
 {

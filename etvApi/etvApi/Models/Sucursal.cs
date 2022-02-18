@@ -8,6 +8,7 @@ namespace etvApi.Models
         public Sucursal()
         {
             Ots = new HashSet<Ot>();
+            Usuarios = new HashSet<Usuario>();
         }
 
         public int IdSucursal { get; set; }
@@ -16,5 +17,6 @@ namespace etvApi.Models
         public bool Estado { get; set; }
 
         public virtual ICollection<Ot> Ots { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }

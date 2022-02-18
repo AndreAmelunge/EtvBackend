@@ -5,11 +5,6 @@ namespace etvApi.Models
 {
     public partial class Ot
     {
-        public Ot()
-        {
-            OtDetalles = new HashSet<OtDetalle>();
-        }
-
         public int IdOt { get; set; }
         public string Codigo { get; set; } = null!;
         public DateTime FechaSolicitud { get; set; }
@@ -21,6 +16,6 @@ namespace etvApi.Models
         public virtual Persona IdPersonaNavigation { get; set; } = null!;
         public virtual Sucursal IdSucursalNavigation { get; set; } = null!;
         public virtual TipoTrabajo IdTipoTrabajoNavigation { get; set; } = null!;
-        public virtual ICollection<OtDetalle> OtDetalles { get; set; }
+        public virtual OtDetalle OtDetalle { get; set; } = null!;
     }
 }

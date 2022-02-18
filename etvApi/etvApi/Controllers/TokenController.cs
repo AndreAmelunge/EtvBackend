@@ -1,8 +1,7 @@
-﻿using etvApi.DTOS;
+﻿using etvApi.Data;
+using etvApi.DTOS;
 using etvApi.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -31,7 +30,7 @@ namespace etvApi.Controllers
                 return NotFound("el usuario no existe");
             var oUsuario = new Usuario
             {
-                Nombre = "pepe",  
+                Nombre = "pepe",
                 IdRol = 1,
             };
             string token = CreateToken(oUsuario);

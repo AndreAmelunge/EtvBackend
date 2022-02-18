@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Etv.BL;
+using etvApi.Data;
 using etvApi.Models;
-using Etv.BL;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace etvApi.Controllers
 {
@@ -36,12 +37,12 @@ namespace etvApi.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int id, [FromBody] Usuario usuario)
         {
-            if (usuario.IdUsuario != id)
+            if (usuario.IdPersona != id)
             {
                 return BadRequest("El id del Usuario no coincide con el id de la URL");
             }
 
-            var existe = await _context.Usuarios.AnyAsync(x => x.IdUsuario == id);
+            var existe = await _context.Usuarios.AnyAsync(x => x.IdPersona == id);
             if (!existe)
             {
                 return NotFound();
@@ -55,12 +56,12 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.Usuarios.AnyAsync(x => x.IdUsuario == id);
+            var existe = await _context.Usuarios.AnyAsync(x => x.IdPersona == id);
             if (!existe)
             {
                 return NotFound();
             }
-            _context.Remove(new Usuario() { IdUsuario = id });
+            _context.Remove(new Usuario() { IdPersona = id });
             await _context.SaveChangesAsync();
             return Ok();
         }
