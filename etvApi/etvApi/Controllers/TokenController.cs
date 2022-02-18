@@ -2,6 +2,7 @@
 using etvApi.DTOS;
 using etvApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,21 +24,23 @@ namespace etvApi.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Login(LoginDTO dto)
         {
-            //var oUsuario = await _context.Usuarios.FirstOrDefaultAsync(q => q.Nombre == dto.Usuario && q.Contrasena == dto.Password);
-            //if (oUsuario == null)
-            //    return NotFound("el usuario no existe");
-            if (!dto.Usuario.Equals("pepe"))
+            var oUsuario = await _context.Usuarios.Include(q => q.IdPersonaNavigation).FirstOrDefaultAsync(q => q.Nombre == dto.Usuario && q.Contrasena == dto.Password);
+            if (oUsuario == null)
                 return NotFound("el usuario no existe");
-            var oUsuario = new Usuario
-            {
-                Nombre = "pepe",
-                IdRol = 1,
-            };
             string token = CreateToken(oUsuario);
             var json = new
             {
                 token,
-                usuario = oUsuario
+                usuario = new
+                {
+                    oUsuario.IdPersona,
+                    oUsuario.IdPersonaNavigation.Nombre,
+                    oUsuario.IdPersonaNavigation.APaterno,
+                    oUsuario.IdPersonaNavigation.AMaterno,
+                    oUsuario.IdPersonaNavigation.IdCargo,
+                    oUsuario.IdRol,
+                    oUsuario.IdSucursal
+                }
             };
             return Ok(json);
         }

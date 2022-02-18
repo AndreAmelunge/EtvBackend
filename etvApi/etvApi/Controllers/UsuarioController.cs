@@ -1,5 +1,6 @@
 ﻿using Etv.BL;
 using etvApi.Data;
+using etvApi.DTOS;
 using etvApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,33 +23,49 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Usuario>>> Get()
         {
-            var data = await _context.Usuarios.ToListAsync();
+            var data = await _context.Usuarios
+                .Include(q => q.IdPersonaNavigation)
+                .Include(q => q.IdRolNavigation)
+                .Include(q => q.IdSucursalNavigation).ToListAsync();
             return data;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Usuario usuario)
+        public async Task<ActionResult> Post(UsuarioDTO usuario)
         {
-            _context.Usuarios.Add(usuario);
+            var existeUsuarioPorPersona = await _context.Usuarios.SingleOrDefaultAsync(q => q.IdPersona == usuario.IdPersona && q.Estado);
+            if (existeUsuarioPorPersona != null)
+                return BadRequest("La persona seleccionada ya tiene un usuario asignado");
+            var existeUsuario = await _context.Usuarios.SingleOrDefaultAsync(q => q.Nombre == usuario.Nombre && q.Estado);
+            if (existeUsuario != null)
+                return BadRequest("Existe un usuario con el mismo nombre, asignar otro usuario");
+            var obj = new Usuario
+            {
+                IdPersona = usuario.IdPersona,
+                Nombre = usuario.Nombre,
+                Contrasena = usuario.Contrasena,
+                IdRol = usuario.IdRol,
+                IdSucursal = usuario.IdSucursal,
+                Estado = true
+            };
+            _context.Usuarios.Add(obj);
             await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Usuario usuario)
+        public async Task<ActionResult> Put(int id, [FromBody] UsuarioDTO usuario)
         {
-            if (usuario.IdPersona != id)
-            {
-                return BadRequest("El id del Usuario no coincide con el id de la URL");
-            }
-
-            var existe = await _context.Usuarios.AnyAsync(x => x.IdPersona == id);
-            if (!existe)
+            var existe = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdPersona == id);
+            if (existe == null)
             {
                 return NotFound();
             }
-
-            _context.Update(usuario);
+            existe.Nombre = usuario.Nombre;
+            existe.Contrasena = usuario.Contrasena;
+            existe.IdRol = usuario.IdRol;
+            existe.IdSucursal = usuario.IdSucursal;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }
