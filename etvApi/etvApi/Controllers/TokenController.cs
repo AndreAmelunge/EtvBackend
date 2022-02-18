@@ -31,7 +31,7 @@ namespace etvApi.Controllers
                 return NotFound("el usuario no existe");
             var oUsuario = new Usuario
             {
-                Nombre = "pepe",
+                Nombre = "pepe",  
                 IdRol = 1,
             };
             string token = CreateToken(oUsuario);
