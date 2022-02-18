@@ -20,34 +20,118 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Ot>>> Get()
         {
-            var data = await _context.Ots.ToListAsync();
+            var data = await _context.Ots
+                .Include(q => q.IdSucursalNavigation)
+                .Include(q => q.IdTipoTrabajoNavigation)
+                .Include(q => q.IdPersonaNavigation).ToListAsync();
+
             return data;
+        }
+
+        [HttpGet("{idOt}")]
+        public async Task<ActionResult<List<OtResponceDTO>>> GetById(int idOt)
+        {
+            List<OtResponceDTO> lst = new List<OtResponceDTO>();
+            var data = await _context.Ots
+                .Include(q => q.IdSucursalNavigation)
+                .Include(q => q.IdTipoTrabajoNavigation)
+                .Include(q => q.IdPersonaNavigation)
+                .Include(q => q.OtDetalle).ToListAsync();
+            foreach (var item in data)
+            {
+                OtResponceDTO obj = new OtResponceDTO
+                {
+                    Ot = new OtDTO
+                    {
+                        IdOt = item.IdOt,
+                        Codigo = item.Codigo,
+                        FechaSolicitud = item.FechaSolicitud,
+                        PrecioTotal = item.PrecioTotal,
+                        IdSucursal = item.IdSucursal,
+                        IdTipoTrabajo = item.IdTipoTrabajo,
+                        IdPersona = item.IdPersona
+                    },
+                    otDetalle = new OtDetalleDTO
+                    {
+                        TrabajoSolicitado = item.OtDetalle.TrabajoSolicitado,
+                        Descripcion = item.OtDetalle.Descripcion,
+                        Precio = item.OtDetalle.Precio,
+                        IdUb = item.OtDetalle.IdUb
+                    }
+                };
+                var ub = await _context.Ubs
+                    .Include(q => q.IdTipoUbNavigation)
+                    .Include(q => q.EstadoUbNavigation)
+                    .Include(q => q.IdModeloNavigation)
+                    .Include(q => q.IdBlindadorNavigation)
+                    .SingleOrDefaultAsync(q => q.IdUb == item.OtDetalle.IdUb);
+                obj.Ub = new UbResponceDto
+                {
+                    IdUb = ub.IdUb,
+                    Codigo = ub.Codigo,
+                    Placa = ub.Placa,
+                    TarjetaOperativa = ub.TarjetaOperativa,
+                    TipoUb = new TipoUbDTO
+                    {
+                        IdTipoUb = ub.IdTipoUbNavigation.IdTipoUb,
+                        Nombre = ub.IdTipoUbNavigation.Nombre,
+                    },
+                    Ano = ub.Ano,
+                    Blindador = new BlindadorDTO
+                    {
+                        IdBlindador = ub.IdBlindadorNavigation.IdBlindador,
+                        Nombre = ub.IdBlindadorNavigation.Nombre
+                    },
+                    Modelo = new ModeloDTO
+                    {
+                        IdModelo = ub.IdModeloNavigation.IdModelo,
+                        Nombre = ub.IdModeloNavigation.Nombre,
+                    },
+                    EstadoUb = new EstadoUbDto
+                    {
+                        IdEstadoUb = ub.EstadoUbNavigation.IdEstadoUb,
+                        Nombre = ub.EstadoUbNavigation.Nombre
+                    }
+                };
+                lst.Add(obj);
+            }
+            return lst;
         }
 
         [HttpPost]
         public async Task<ActionResult> Post(OtRegistroDTO otDto)
         {
-            var ot = new Ot
+            try
             {
-                Codigo = otDto.Ot.Codigo,
-                FechaSolicitud = otDto.Ot.FechaSolicitud,
-                PrecioTotal = otDto.Ot.PrecioTotal,
-                IdSucursal = otDto.Ot.IdSucursal,
-                IdTipoTrabajo = otDto.Ot.IdTipoTrabajo,
-                IdPersona = otDto.Ot.IdPersona,
-            };
-            _context.Ots.Add(ot);
-            var id = await _context.SaveChangesAsync();
-            var otDetalle = new OtDetalle
+                var otDetalle = new OtDetalle
+                {
+                    IdOt = 1,
+                    TrabajoSolicitado = otDto.otDetalle.TrabajoSolicitado,
+                    Descripcion = otDto.otDetalle.Descripcion,
+                    Precio = otDto.otDetalle.Precio,
+                    IdUb = otDto.otDetalle.IdUb,
+                };
+                var ot = new Ot
+                {
+                    Codigo = otDto.Ot.Codigo,
+                    FechaSolicitud = otDto.Ot.FechaSolicitud,
+                    PrecioTotal = otDto.Ot.PrecioTotal,
+                    IdSucursal = otDto.Ot.IdSucursal,
+                    IdTipoTrabajo = otDto.Ot.IdTipoTrabajo,
+                    IdPersona = otDto.Ot.IdPersona,
+                    OtDetalle = otDetalle
+                };
+                //_context.OtDetalles.Add(otDetalle);
+                //var id = await _context.SaveChangesAsync();
+
+                _context.Ots.Add(ot);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
             {
-                IdOt = id,
-                TrabajoSolicitado = otDto.otDetalle.TrabajoSolicitado,
-                Descripcion = otDto.otDetalle.Descripcion,
-                Precio = otDto.otDetalle.Precio,
-                IdUb = otDto.otDetalle.IdUb,
-            };
-            _context.OtDetalles.Add(otDetalle);
-            await _context.SaveChangesAsync();
+                var error = ex.Message;
+            }
+
             return Ok();
         }
 
@@ -80,13 +164,21 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.Ots.AnyAsync(x => x.IdOt == id);
-            if (!existe)
+            try
             {
-                return NotFound();
+                var existe = await _context.Ots.AnyAsync(x => x.IdOt == id);
+                if (!existe)
+                {
+                    return NotFound();
+                }
+                _context.Remove(new Ot() { IdOt = id });
+                await _context.SaveChangesAsync();
             }
-            _context.Remove(new Ot() { IdOt = id });
-            await _context.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                var error = ex.Message;
+            }
+
             return Ok();
         }
     }

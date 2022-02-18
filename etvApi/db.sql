@@ -143,7 +143,7 @@ foreign key (idPersona) references persona (idPersona)
 )
 
 create table otDetalle(
-idOt int identity (1,1) not null,
+idOt int not null,
 trabajoSolicitado nvarchar(50)not null,
 descripcion nvarchar(400) null,
 precio money not null,
@@ -152,7 +152,7 @@ primary key (idOt),
 foreign key (idOt) references ot (idOt),
 foreign key (idUb) references ub (idUb),
 )
---Scaffold-DbContext "Data Source=.;Initial Catalog=etv;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+--Scaffold-DbContext "Data Source=.;Initial Catalog=etv;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data
 select * from marca
 insert into marca values('marca 2',1),('marca 3',1),('marca 4',1),
 ('marca 5',1),('marca 6',1),('marca 7',1),('marca 8',1),('marca 9',1),
@@ -162,5 +162,7 @@ select * from rol
 
 select * from usuario
 select * from persona
-insert into usuario values (1,'pepe','123',2,1,1)
+select * from ub
+select * from ot
+select * from otDetalle
 

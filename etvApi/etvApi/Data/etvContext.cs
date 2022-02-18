@@ -46,7 +46,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Blindador>(entity =>
             {
                 entity.HasKey(e => e.IdBlindador)
-                    .HasName("PK__blindado__69434C1E4CC90986");
+                    .HasName("PK__blindado__69434C1EAD2EBC66");
 
                 entity.ToTable("blindador");
 
@@ -62,7 +62,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Cargo>(entity =>
             {
                 entity.HasKey(e => e.IdCargo)
-                    .HasName("PK__cargo__3D0E29B8D634816C");
+                    .HasName("PK__cargo__3D0E29B8F80588FD");
 
                 entity.ToTable("cargo");
 
@@ -78,7 +78,7 @@ namespace etvApi.Data
             modelBuilder.Entity<EstadoUb>(entity =>
             {
                 entity.HasKey(e => e.IdEstadoUb)
-                    .HasName("PK__estadoUb__8F9398781B9B6288");
+                    .HasName("PK__estadoUb__8F9398784BD44A84");
 
                 entity.ToTable("estadoUb");
 
@@ -92,7 +92,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Marca>(entity =>
             {
                 entity.HasKey(e => e.IdMarca)
-                    .HasName("PK__marca__703318122DA35877");
+                    .HasName("PK__marca__70331812CEB586E9");
 
                 entity.ToTable("marca");
 
@@ -108,7 +108,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Modelo>(entity =>
             {
                 entity.HasKey(e => e.IdModelo)
-                    .HasName("PK__modelo__13A52CD12ACBA692");
+                    .HasName("PK__modelo__13A52CD1A8740EF3");
 
                 entity.ToTable("modelo");
 
@@ -132,7 +132,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Ot>(entity =>
             {
                 entity.HasKey(e => e.IdOt)
-                    .HasName("PK__ot__9DB850DD033795B0");
+                    .HasName("PK__ot__9DB850DD442E12C8");
 
                 entity.ToTable("ot");
 
@@ -178,12 +178,12 @@ namespace etvApi.Data
             modelBuilder.Entity<OtDetalle>(entity =>
             {
                 entity.HasKey(e => e.IdOt)
-                    .HasName("PK__otDetall__9DB850DDDDA33471");
+                    .HasName("PK__otDetall__9DB850DDE1E43257");
 
                 entity.ToTable("otDetalle");
 
                 entity.Property(e => e.IdOt)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedNever()
                     .HasColumnName("idOt");
 
                 entity.Property(e => e.Descripcion)
@@ -203,20 +203,18 @@ namespace etvApi.Data
                 entity.HasOne(d => d.IdOtNavigation)
                     .WithOne(p => p.OtDetalle)
                     .HasForeignKey<OtDetalle>(d => d.IdOt)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__otDetalle__idOt__5BE2A6F2");
 
                 entity.HasOne(d => d.IdUbNavigation)
                     .WithMany(p => p.OtDetalles)
                     .HasForeignKey(d => d.IdUb)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__otDetalle__idUb__5CD6CB2B");
             });
 
             modelBuilder.Entity<Persona>(entity =>
             {
                 entity.HasKey(e => e.IdPersona)
-                    .HasName("PK__persona__A47881419AE3F425");
+                    .HasName("PK__persona__A47881410AC88E5A");
 
                 entity.ToTable("persona");
 
@@ -248,7 +246,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Rol>(entity =>
             {
                 entity.HasKey(e => e.IdRol)
-                    .HasName("PK__rol__3C872F76F0E8F5F5");
+                    .HasName("PK__rol__3C872F764048F47C");
 
                 entity.ToTable("rol");
 
@@ -262,7 +260,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Sucursal>(entity =>
             {
                 entity.HasKey(e => e.IdSucursal)
-                    .HasName("PK__sucursal__F707694C616CE55B");
+                    .HasName("PK__sucursal__F707694C9C6666C6");
 
                 entity.ToTable("sucursal");
 
@@ -282,7 +280,7 @@ namespace etvApi.Data
             modelBuilder.Entity<TipoTrabajo>(entity =>
             {
                 entity.HasKey(e => e.IdTipoTrabajo)
-                    .HasName("PK__tipoTrab__4893AC715C2D46B7");
+                    .HasName("PK__tipoTrab__4893AC715A61F48E");
 
                 entity.ToTable("tipoTrabajo");
 
@@ -296,7 +294,7 @@ namespace etvApi.Data
             modelBuilder.Entity<TipoUb>(entity =>
             {
                 entity.HasKey(e => e.IdTipoUb)
-                    .HasName("PK__tipoUb__13ED3341331B05B3");
+                    .HasName("PK__tipoUb__13ED33418910FC65");
 
                 entity.ToTable("tipoUb");
 
@@ -312,7 +310,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Ub>(entity =>
             {
                 entity.HasKey(e => e.IdUb)
-                    .HasName("PK__ub__9DB8003328928078");
+                    .HasName("PK__ub__9DB800338D74BAC6");
 
                 entity.ToTable("ub");
 
@@ -370,7 +368,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.IdPersona)
-                    .HasName("PK__usuario__A478814189D9677B");
+                    .HasName("PK__usuario__A478814198D3AB9A");
 
                 entity.ToTable("usuario");
 
