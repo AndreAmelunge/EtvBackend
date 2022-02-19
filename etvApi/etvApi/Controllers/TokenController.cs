@@ -1,6 +1,6 @@
-﻿using etvApi.Data;
-using etvApi.DTOS;
-using etvApi.Models;
+﻿using Etv.entities.DTOS;
+using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -24,7 +24,9 @@ namespace etvApi.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Login(LoginDTO dto)
         {
-            var oUsuario = await _context.Usuarios.Include(q => q.IdPersonaNavigation).FirstOrDefaultAsync(q => q.Nombre == dto.Usuario && q.Contrasena == dto.Password);
+            var oUsuario = await _context.Usuarios
+                .Include(q => q.IdPersonaNavigation)
+                .Include(q => q.IdRolNavigation).FirstOrDefaultAsync(q => q.Nombre == dto.Usuario && q.Contrasena == dto.Password);
             if (oUsuario == null)
                 return NotFound("el usuario no existe");
             string token = CreateToken(oUsuario);
@@ -39,6 +41,7 @@ namespace etvApi.Controllers
                     oUsuario.IdPersonaNavigation.AMaterno,
                     oUsuario.IdPersonaNavigation.IdCargo,
                     oUsuario.IdRol,
+                    NombreRol = oUsuario.IdRolNavigation.Nombre,
                     oUsuario.IdSucursal
                 }
             };

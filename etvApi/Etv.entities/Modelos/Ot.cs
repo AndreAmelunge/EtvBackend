@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace etvApi.Models
+namespace Etv.entities.Modelos
 {
     public partial class Ot
     {

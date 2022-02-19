@@ -1,4 +1,4 @@
-﻿namespace etvApi.DTOS
+﻿namespace Etv.entities.DTOS
 {
     public class OtRegistroDTO
     {
@@ -18,7 +18,7 @@
 
     }
     public class OtDetalleDTO
-    {        
+    {
         public string TrabajoSolicitado { get; set; } = null!;
         public string? Descripcion { get; set; }
         public decimal Precio { get; set; }

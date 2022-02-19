@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace etvApi.Models
+namespace Etv.entities.Modelos
 {
     public partial class Ub
     {
@@ -19,6 +19,7 @@ namespace etvApi.Models
         public int IdBlindador { get; set; }
         public int IdModelo { get; set; }
         public int EstadoUb { get; set; }
+        public bool Estado { get; set; }
 
         public virtual EstadoUb EstadoUbNavigation { get; set; } = null!;
         public virtual Blindador IdBlindadorNavigation { get; set; } = null!;

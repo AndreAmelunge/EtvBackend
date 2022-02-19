@@ -1,6 +1,6 @@
-﻿using etvApi.Data;
-using etvApi.DTOS;
-using etvApi.Models;
+﻿using Etv.entities.DTOS;
+using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +20,7 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Sucursal>>> Get()
         {
-            var data = await _context.Sucursals.ToListAsync();
+            var data = await _context.Sucursals.Where(q => q.Estado).ToListAsync();
             return data;
         }
 
@@ -46,7 +46,7 @@ namespace etvApi.Controllers
             {
                 return NotFound();
             }
-
+            sucursal.Estado = true;
             _context.Update(sucursal);
             await _context.SaveChangesAsync();
             return Ok();
@@ -55,12 +55,13 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.Sucursals.AnyAsync(x => x.IdSucursal == id);
-            if (!existe)
+            var existe = await _context.Sucursals.FirstOrDefaultAsync(x => x.IdSucursal == id);
+            if (existe == null)
             {
                 return NotFound();
             }
-            _context.Remove(new Sucursal() { IdSucursal = id });
+            existe.Estado = false;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

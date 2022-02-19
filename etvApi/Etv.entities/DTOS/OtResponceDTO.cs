@@ -1,6 +1,4 @@
-﻿using etvApi.Models;
-
-namespace etvApi.DTOS
+﻿namespace Etv.entities.DTOS
 {
     public class OtResponceDTO : OtRegistroDTO
     {

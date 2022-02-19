@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using etvApi.Models;
+using Etv.entities.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -46,7 +46,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Blindador>(entity =>
             {
                 entity.HasKey(e => e.IdBlindador)
-                    .HasName("PK__blindado__69434C1EAD2EBC66");
+                    .HasName("PK__blindado__69434C1E869FA9F0");
 
                 entity.ToTable("blindador");
 
@@ -62,7 +62,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Cargo>(entity =>
             {
                 entity.HasKey(e => e.IdCargo)
-                    .HasName("PK__cargo__3D0E29B8F80588FD");
+                    .HasName("PK__cargo__3D0E29B82DC0BC39");
 
                 entity.ToTable("cargo");
 
@@ -78,11 +78,13 @@ namespace etvApi.Data
             modelBuilder.Entity<EstadoUb>(entity =>
             {
                 entity.HasKey(e => e.IdEstadoUb)
-                    .HasName("PK__estadoUb__8F9398784BD44A84");
+                    .HasName("PK__estadoUb__8F939878BE4DBDE7");
 
                 entity.ToTable("estadoUb");
 
                 entity.Property(e => e.IdEstadoUb).HasColumnName("idEstadoUb");
+
+                entity.Property(e => e.Estado).HasColumnName("estado");
 
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(50)
@@ -92,7 +94,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Marca>(entity =>
             {
                 entity.HasKey(e => e.IdMarca)
-                    .HasName("PK__marca__70331812CEB586E9");
+                    .HasName("PK__marca__7033181233591CA1");
 
                 entity.ToTable("marca");
 
@@ -108,7 +110,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Modelo>(entity =>
             {
                 entity.HasKey(e => e.IdModelo)
-                    .HasName("PK__modelo__13A52CD1A8740EF3");
+                    .HasName("PK__modelo__13A52CD180B150EC");
 
                 entity.ToTable("modelo");
 
@@ -132,7 +134,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Ot>(entity =>
             {
                 entity.HasKey(e => e.IdOt)
-                    .HasName("PK__ot__9DB850DD442E12C8");
+                    .HasName("PK__ot__9DB850DD3ED28321");
 
                 entity.ToTable("ot");
 
@@ -178,7 +180,7 @@ namespace etvApi.Data
             modelBuilder.Entity<OtDetalle>(entity =>
             {
                 entity.HasKey(e => e.IdOt)
-                    .HasName("PK__otDetall__9DB850DDE1E43257");
+                    .HasName("PK__otDetall__9DB850DDE021EF33");
 
                 entity.ToTable("otDetalle");
 
@@ -214,7 +216,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Persona>(entity =>
             {
                 entity.HasKey(e => e.IdPersona)
-                    .HasName("PK__persona__A47881410AC88E5A");
+                    .HasName("PK__persona__A47881414A7B54BE");
 
                 entity.ToTable("persona");
 
@@ -246,7 +248,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Rol>(entity =>
             {
                 entity.HasKey(e => e.IdRol)
-                    .HasName("PK__rol__3C872F764048F47C");
+                    .HasName("PK__rol__3C872F7604D92C77");
 
                 entity.ToTable("rol");
 
@@ -260,7 +262,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Sucursal>(entity =>
             {
                 entity.HasKey(e => e.IdSucursal)
-                    .HasName("PK__sucursal__F707694C9C6666C6");
+                    .HasName("PK__sucursal__F707694C73B28308");
 
                 entity.ToTable("sucursal");
 
@@ -280,11 +282,13 @@ namespace etvApi.Data
             modelBuilder.Entity<TipoTrabajo>(entity =>
             {
                 entity.HasKey(e => e.IdTipoTrabajo)
-                    .HasName("PK__tipoTrab__4893AC715A61F48E");
+                    .HasName("PK__tipoTrab__4893AC712F211442");
 
                 entity.ToTable("tipoTrabajo");
 
                 entity.Property(e => e.IdTipoTrabajo).HasColumnName("idTipoTrabajo");
+
+                entity.Property(e => e.Estado).HasColumnName("estado");
 
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(50)
@@ -294,7 +298,7 @@ namespace etvApi.Data
             modelBuilder.Entity<TipoUb>(entity =>
             {
                 entity.HasKey(e => e.IdTipoUb)
-                    .HasName("PK__tipoUb__13ED33418910FC65");
+                    .HasName("PK__tipoUb__13ED3341CE26F49C");
 
                 entity.ToTable("tipoUb");
 
@@ -310,7 +314,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Ub>(entity =>
             {
                 entity.HasKey(e => e.IdUb)
-                    .HasName("PK__ub__9DB800338D74BAC6");
+                    .HasName("PK__ub__9DB800335A1A111B");
 
                 entity.ToTable("ub");
 
@@ -323,6 +327,8 @@ namespace etvApi.Data
                 entity.Property(e => e.Codigo)
                     .HasMaxLength(10)
                     .HasColumnName("codigo");
+
+                entity.Property(e => e.Estado).HasColumnName("estado");
 
                 entity.Property(e => e.EstadoUb).HasColumnName("estadoUb");
 
@@ -368,7 +374,7 @@ namespace etvApi.Data
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.IdPersona)
-                    .HasName("PK__usuario__A478814198D3AB9A");
+                    .HasName("PK__usuario__A478814129018348");
 
                 entity.ToTable("usuario");
 

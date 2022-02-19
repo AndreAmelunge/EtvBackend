@@ -1,6 +1,6 @@
-﻿using etvApi.Data;
-using etvApi.DTOS;
-using etvApi.Models;
+﻿using Etv.entities.DTOS;
+using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +20,7 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Persona>>> Get()
         {
-            var data = await _context.Personas.Include(q => q.IdCargoNavigation).ToListAsync();
+            var data = await _context.Personas.Include(q => q.IdCargoNavigation).Where(q => q.Estado).ToListAsync();
             return data;
         }
 
@@ -53,6 +53,7 @@ namespace etvApi.Controllers
             existe.APaterno = persona.APaterno;
             existe.AMaterno = persona.AMaterno;
             existe.IdCargo = persona.IdCargo;
+            existe.Estado = true;
             _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
@@ -61,12 +62,13 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.Personas.AnyAsync(x => x.IdPersona == id);
-            if (!existe)
+            var existe = await _context.Personas.FirstOrDefaultAsync(x => x.IdPersona == id);
+            if (existe == null)
             {
                 return NotFound();
             }
-            _context.Remove(new Persona() { IdPersona = id });
+            existe.Estado = false;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

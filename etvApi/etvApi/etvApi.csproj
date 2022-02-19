@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Etv.BL\Etv.BL.csproj" />
+    <ProjectReference Include="..\Etv.entities\Etv.entities.csproj" />
   </ItemGroup>
 
 </Project>

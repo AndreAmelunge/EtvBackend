@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace etvApi.Models
+namespace Etv.entities.Modelos
 {
-    public partial class Blindador
+    public partial class EstadoUb
     {
-        public Blindador()
+        public EstadoUb()
         {
             Ubs = new HashSet<Ub>();
         }
 
-        public int IdBlindador { get; set; }
+        public int IdEstadoUb { get; set; }
         public string Nombre { get; set; } = null!;
         public bool Estado { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace etvApi.Models
+namespace Etv.entities.Modelos
 {
     public partial class TipoTrabajo
     {
@@ -12,6 +12,7 @@ namespace etvApi.Models
 
         public int IdTipoTrabajo { get; set; }
         public string? Nombre { get; set; }
+        public bool Estado { get; set; }
 
         public virtual ICollection<Ot> Ots { get; set; }
     }

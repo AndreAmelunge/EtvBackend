@@ -1,6 +1,6 @@
-﻿using etvApi.Data;
-using etvApi.DTOS;
-using etvApi.Models;
+﻿using Etv.entities.DTOS;
+using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +20,7 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Modelo>>> Get()
         {
-            return await _context.Modelos.Include(q => q.IdMarcaNavigation).ToListAsync();
+            return await _context.Modelos.Include(q => q.IdMarcaNavigation).Where(q => q.Estado).ToListAsync();
         }
 
         [HttpPost]
@@ -46,6 +46,7 @@ namespace etvApi.Controllers
 
             existe.Nombre = modelo.Nombre;
             existe.IdMarca = modelo.IdMarca;
+            existe.Estado = true;
             _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
@@ -54,12 +55,13 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.Modelos.AnyAsync(x => x.IdModelo == id);
-            if (!existe)
+            var existe = await _context.Modelos.FirstOrDefaultAsync(x => x.IdModelo == id);
+            if (existe == null)
             {
                 return NotFound();
             }
-            _context.Remove(new Modelo() { IdModelo = id });
+            existe.Estado = false;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

@@ -1,4 +1,4 @@
-﻿namespace etvApi.DTOS
+﻿namespace Etv.entities.DTOS
 {
     public class UbDTO
     {

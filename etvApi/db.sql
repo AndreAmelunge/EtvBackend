@@ -73,6 +73,7 @@ foreign key (idSucursal) references sucursal (idSucursal),
 create table estadoUb(
 idEstadoUb int identity (1,1) not null,
 nombre nvarchar(50) not null,
+estado bit not null,
 primary key (idEstadoUb)
 )
 
@@ -116,6 +117,7 @@ ano nvarchar(4),
 idBlindador int not null,
 idModelo int not null,
 estadoUb int not null,
+estado bit not null,
 primary key(idUb),
 foreign key (estadoUb) references estadoUb (idEstadoUb),
 foreign key (idBlindador) references blindador (idBlindador),
@@ -126,6 +128,7 @@ foreign key (idTipoUb) references tipoUb (idTipoUb)
 create table tipoTrabajo(
 idTipoTrabajo int identity (1,1) not null,
 nombre nvarchar(50),
+estado bit not null,
 primary key (idTipoTrabajo)
 )
 
@@ -166,23 +169,25 @@ select * from blindador
 insert into blindador values ('blindador 1',1),('blindador 2',1),('blindador 3',1),('blindador 4',1)
 
 select * from estadoUb
-insert into estadoUb values ('Estado ub 1'),('Estado ub 2'),('Estado ub 3'),('Estado ub 4')
+insert into estadoUb values ('Estado ub 1',1),('Estado ub 2',1),('Estado ub 3',1),('Estado ub 4',1)
 
 select * from tipoUb
 insert into tipoUb values ('Tipo ub 1',1),('Tipo ub 2',1),('Tipo ub 3',1),('Tipo ub 4',1)
 
 select * from ub
-insert into ub values ('891-WRD','895-EFD','Tarje',1,'2022',1,1,1)
-insert into ub values ('456-QAZ','462-FVG','1 Tarje',1,'2021',1,1,1)
+insert into ub values ('891-WRD','895-EFD','Tarje',1,'2022',1,1,1,1)
+insert into ub values ('456-QAZ','462-FVG','1 Tarje',1,'2021',1,1,1,1)
 
 select * from cargo
 insert into cargo values ('Cargo 1',1),('Cargo 2',1),('Cargo 3',1)
 
 select * from rol
-insert into rol values ('Rol 1',1),('Rol 2',1),('Rol 3',1)
+insert into rol values ('Adm',1),('Chuquisaca',1),('La Paz',1),('Cochabamba',1)
+,('Oruro',1),('Potosí',1),('Tarija',1),('Santa Cruz',1),('Beni',1),('Pando',1)
 
 select * from sucursal
-insert into sucursal values ('Sucursal 1','1',1),('Sucursal 2','2',1),('Sucursal 3','3',1)
+insert into sucursal values ('Chuquisaca','CH',1),('La Paz','LP',1),('Cochabamba','CB',1)
+,('Oruro','OR',1),('Potosí','PT',1),('Tarija','TJ',1),('Santa Cruz','SC',1),('Beni','BE',1),('Pando','PD',1)
 
 select * from persona
 insert into persona values ('pepe','rios','ortega',1,1)
@@ -193,7 +198,7 @@ insert into usuario values (1,'pepe','123',1,1,1)
 insert into usuario values (2,'juan','123',2,3,1)
 
 select * from tipoTrabajo
-insert into tipoTrabajo values ('Trabajo 1'),('Trabajo 2'),('Trabajo 3')
+insert into tipoTrabajo values ('Trabajo 1',1),('Trabajo 2',1),('Trabajo 3',1)
 delete from ot where idOt=4
 
 select * from ot
@@ -204,3 +209,9 @@ select * from ub
 select * from otDetalle
 insert into otDetalle values (1,'Transporte','transporte privado',10,1)
 insert into otDetalle values (2,'Transporte','transporte privado',20,1)
+
+select * from tipoTrabajo
+update tipoTrabajo set nombre='www' where idTipoTrabajo=3
+
+select * from usuario
+update usuario set estado=1 

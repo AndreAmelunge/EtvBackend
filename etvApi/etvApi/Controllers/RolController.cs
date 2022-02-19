@@ -1,5 +1,5 @@
-﻿using etvApi.Data;
-using etvApi.Models;
+﻿using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,13 +19,14 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Rol>>> Get()
         {
-            var data = await _context.Rols.ToListAsync();
+            var data = await _context.Rols.Where(q => q.Estado).ToListAsync();
             return data;
         }
 
         [HttpPost]
         public async Task<ActionResult> Post(Rol rol)
         {
+            rol.Estado = true;
             _context.Rols.Add(rol);
             await _context.SaveChangesAsync();
             return Ok();
@@ -44,7 +45,7 @@ namespace etvApi.Controllers
             {
                 return NotFound();
             }
-
+            rol.Estado = true;
             _context.Update(rol);
             await _context.SaveChangesAsync();
             return Ok();
@@ -53,12 +54,13 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.Rols.AnyAsync(x => x.IdRol == id);
-            if (!existe)
+            var existe = await _context.Rols.FirstOrDefaultAsync(x => x.IdRol == id);
+            if (existe == null)
             {
                 return NotFound();
             }
-            _context.Remove(new Rol() { IdRol = id });
+            existe.Estado = false;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

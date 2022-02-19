@@ -1,6 +1,6 @@
-﻿using etvApi.Data;
-using etvApi.DTOS;
-using etvApi.Models;
+﻿using Etv.entities.DTOS;
+using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -114,7 +114,7 @@ namespace etvApi.Controllers
                 var ot = new Ot
                 {
                     Codigo = otDto.Ot.Codigo,
-                    FechaSolicitud = otDto.Ot.FechaSolicitud,
+                    FechaSolicitud = DateTime.Now,//otDto.Ot.FechaSolicitud,
                     PrecioTotal = otDto.Ot.PrecioTotal,
                     IdSucursal = otDto.Ot.IdSucursal,
                     IdTipoTrabajo = otDto.Ot.IdTipoTrabajo,
@@ -142,7 +142,7 @@ namespace etvApi.Controllers
             if (existeOt == null)
                 return NotFound();
             existeOt.Codigo = otDto.Ot.Codigo;
-            existeOt.FechaSolicitud = otDto.Ot.FechaSolicitud;
+            //existeOt.FechaSolicitud = otDto.Ot.FechaSolicitud;
             existeOt.PrecioTotal = otDto.Ot.PrecioTotal;
             existeOt.IdSucursal = otDto.Ot.IdSucursal;
             existeOt.IdTipoTrabajo = otDto.Ot.IdTipoTrabajo;

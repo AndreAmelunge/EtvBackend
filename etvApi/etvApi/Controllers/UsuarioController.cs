@@ -1,7 +1,6 @@
-﻿using Etv.BL;
+﻿using Etv.entities.DTOS;
+using Etv.entities.Modelos;
 using etvApi.Data;
-using etvApi.DTOS;
-using etvApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +11,9 @@ namespace etvApi.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly etvContext _context;
-        private readonly UserBL _userBL;
-
         public UsuarioController(etvContext context)
         {
             _context = context;
-            _userBL = new UserBL();
         }
 
         [HttpGet]
@@ -26,7 +22,7 @@ namespace etvApi.Controllers
             var data = await _context.Usuarios
                 .Include(q => q.IdPersonaNavigation)
                 .Include(q => q.IdRolNavigation)
-                .Include(q => q.IdSucursalNavigation).ToListAsync();
+                .Include(q => q.IdSucursalNavigation).Where(q => q.Estado).ToListAsync();
             return data;
         }
 
@@ -65,6 +61,7 @@ namespace etvApi.Controllers
             existe.Contrasena = usuario.Contrasena;
             existe.IdRol = usuario.IdRol;
             existe.IdSucursal = usuario.IdSucursal;
+            existe.Estado = true;
             _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
@@ -73,12 +70,12 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.Usuarios.AnyAsync(x => x.IdPersona == id);
-            if (!existe)
+            var existe = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdPersona == id);
+            if (existe == null)
             {
                 return NotFound();
             }
-            _context.Remove(new Usuario() { IdPersona = id });
+            _context.Remove(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

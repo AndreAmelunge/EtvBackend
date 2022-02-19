@@ -1,6 +1,6 @@
-﻿using etvApi.Data;
-using etvApi.DTOS;
-using etvApi.Models;
+﻿using Etv.entities.DTOS;
+using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,22 +24,26 @@ namespace etvApi.Controllers
                 .Include(q => q.IdTipoUbNavigation)
                 .Include(q => q.IdBlindadorNavigation)
                 .Include(q => q.IdModeloNavigation)
-                .Include(q => q.EstadoUbNavigation).ToListAsync();
+                .Include(q => q.EstadoUbNavigation)
+                .Where(q => q.Estado).ToListAsync();
             return data;
         }
 
         [HttpPost]
         public async Task<ActionResult> Post(UbDTO ub)
         {
-            Ub obj = new Ub();
-            obj.Codigo = ub.Codigo;
-            obj.Placa = ub.Placa;
-            obj.TarjetaOperativa = ub.TarjetaOperativa;
-            obj.IdTipoUb = ub.IdTipoUb;
-            obj.Ano = ub.Ano;
-            obj.IdBlindador = ub.IdBlindador;
-            obj.IdModelo = ub.IdModelo;
-            obj.EstadoUb = ub.EstadoUb;
+            Ub obj = new()
+            {
+                Codigo = ub.Codigo,
+                Placa = ub.Placa,
+                TarjetaOperativa = ub.TarjetaOperativa,
+                IdTipoUb = ub.IdTipoUb,
+                Ano = ub.Ano,
+                IdBlindador = ub.IdBlindador,
+                IdModelo = ub.IdModelo,
+                EstadoUb = ub.EstadoUb,
+                Estado = true
+            };
             _context.Ubs.Add(obj);
             await _context.SaveChangesAsync();
             return Ok();
@@ -60,6 +64,7 @@ namespace etvApi.Controllers
             existe.IdBlindador = ub.IdBlindador;
             existe.IdModelo = ub.IdModelo;
             existe.EstadoUb = ub.EstadoUb;
+            existe.Estado = true;
             _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
@@ -68,12 +73,13 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.Ubs.AnyAsync(x => x.IdUb == id);
-            if (!existe)
+            var existe = await _context.Ubs.FirstOrDefaultAsync(x => x.IdUb == id);
+            if (existe == null)
             {
                 return NotFound();
             }
-            _context.Remove(new Ub() { IdUb = id });
+            existe.Estado = false;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

@@ -1,5 +1,5 @@
-﻿using etvApi.Data;
-using etvApi.Models;
+﻿using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,13 +19,14 @@ namespace etvApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<TipoUb>>> Get()
         {
-            var data = await _context.TipoUbs.ToListAsync();
+            var data = await _context.TipoUbs.Where(q => q.Estado).ToListAsync();
             return data;
         }
 
         [HttpPost]
         public async Task<ActionResult> Post(TipoUb tipoUb)
         {
+            tipoUb.Estado = true;
             _context.TipoUbs.Add(tipoUb);
             await _context.SaveChangesAsync();
             return Ok();
@@ -44,7 +45,7 @@ namespace etvApi.Controllers
             {
                 return NotFound();
             }
-
+            tipoUb.Estado = true;
             _context.Update(tipoUb);
             await _context.SaveChangesAsync();
             return Ok();
@@ -53,12 +54,13 @@ namespace etvApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await _context.TipoUbs.AnyAsync(x => x.IdTipoUb == id);
-            if (!existe)
+            var existe = await _context.TipoUbs.FirstOrDefaultAsync(x => x.IdTipoUb == id);
+            if (existe == null)
             {
                 return NotFound();
             }
-            _context.Remove(new TipoUb() { IdTipoUb = id });
+            existe.Estado = false;
+            _context.Update(existe);
             await _context.SaveChangesAsync();
             return Ok();
         }

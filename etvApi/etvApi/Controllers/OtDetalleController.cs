@@ -1,5 +1,5 @@
-﻿using etvApi.Data;
-using etvApi.Models;
+﻿using Etv.entities.Modelos;
+using etvApi.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
