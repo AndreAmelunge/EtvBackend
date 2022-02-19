@@ -1,3 +1,4 @@
+--Scaffold-DbContext "Data Source=.;Initial Catalog=etv;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data
 use master
 go
 
@@ -149,20 +150,57 @@ descripcion nvarchar(400) null,
 precio money not null,
 idUb int not null,
 primary key (idOt),
-foreign key (idOt) references ot (idOt),
-foreign key (idUb) references ub (idUb),
+foreign key (idOt) references ot (idOt) on update cascade on delete cascade,
+foreign key (idUb) references ub (idUb) on update cascade on delete cascade,
 )
---Scaffold-DbContext "Data Source=.;Initial Catalog=etv;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data
+
 select * from marca
 insert into marca values('marca 2',1),('marca 3',1),('marca 4',1),
 ('marca 5',1),('marca 6',1),('marca 7',1),('marca 8',1),('marca 9',1),
 ('marca 10',1),('marca 11',1),('marca 12',1),('marca 13',1),('marca 14',1)
 
+select * from modelo 
+insert into modelo values ('modelo 1',1,1),('modelo 2',1,2),('modelo 3',1,3)
+
+select * from blindador
+insert into blindador values ('blindador 1',1),('blindador 2',1),('blindador 3',1),('blindador 4',1)
+
+select * from estadoUb
+insert into estadoUb values ('Estado ub 1'),('Estado ub 2'),('Estado ub 3'),('Estado ub 4')
+
+select * from tipoUb
+insert into tipoUb values ('Tipo ub 1',1),('Tipo ub 2',1),('Tipo ub 3',1),('Tipo ub 4',1)
+
+select * from ub
+insert into ub values ('891-WRD','895-EFD','Tarje',1,'2022',1,1,1)
+insert into ub values ('456-QAZ','462-FVG','1 Tarje',1,'2021',1,1,1)
+
+select * from cargo
+insert into cargo values ('Cargo 1',1),('Cargo 2',1),('Cargo 3',1)
+
 select * from rol
+insert into rol values ('Rol 1',1),('Rol 2',1),('Rol 3',1)
+
+select * from sucursal
+insert into sucursal values ('Sucursal 1','1',1),('Sucursal 2','2',1),('Sucursal 3','3',1)
+
+select * from persona
+insert into persona values ('pepe','rios','ortega',1,1)
+insert into persona values ('juan','perez','rios',1,1)
 
 select * from usuario
-select * from persona
-select * from ub
-select * from ot
-select * from otDetalle
+insert into usuario values (1,'pepe','123',1,1,1)
+insert into usuario values (2,'juan','123',2,3,1)
 
+select * from tipoTrabajo
+insert into tipoTrabajo values ('Trabajo 1'),('Trabajo 2'),('Trabajo 3')
+delete from ot where idOt=4
+
+select * from ot
+insert into ot values ('RFF-7',getdate(),50,1,1,1)
+insert into ot values ('DFC-4',getdate(),40,2,3,2)
+
+select * from ub
+select * from otDetalle
+insert into otDetalle values (1,'Transporte','transporte privado',10,1)
+insert into otDetalle values (2,'Transporte','transporte privado',20,1)
