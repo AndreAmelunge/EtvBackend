@@ -150,7 +150,7 @@ foreign key (idPersona) references persona (idPersona)
 
 create table otDetalle(
 idOt int not null,
-trabajoSolicitado nvarchar(50)not null,
+trabajoSolicitado nvarchar(max)not null,
 descripcion nvarchar(400) null,
 precio money not null,
 idUb int not null,
