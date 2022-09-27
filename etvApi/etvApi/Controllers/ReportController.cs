@@ -41,11 +41,13 @@ namespace etvApi.Controllers
             {
                 Marca = data.OtDetalle.IdUbNavigation.IdModeloNavigation.IdMarcaNavigation.Nombre,
                 NumeroPlaca = data.OtDetalle.IdUbNavigation.Placa,
-                UB_VEHICULO_CUENTA = "Desconocido"
+                UB_VEHICULO_CUENTA = data.OtDetalle.IdUbNavigation.Codigo
             };
             report.Detalle = new Detalle
             {
-                Descripcion = data.OtDetalle.TrabajoSolicitado,
+                Codigo = data.Codigo,
+                Trabajosolicitado = data.OtDetalle.TrabajoSolicitado,
+                Descripcion = data.OtDetalle.Descripcion,
                 Precio = data.OtDetalle.Precio
             };
             return report;

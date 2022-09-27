@@ -30,6 +30,8 @@ namespace Etv.entities.DTOS
 
     public class Detalle
     {
+        public string Codigo { get; set; }
+        public string Trabajosolicitado { get; set; } = null!;
         public string Descripcion { get; set; } = null!;
         public decimal Precio { get; set; }
     }
