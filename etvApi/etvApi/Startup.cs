@@ -27,11 +27,11 @@ namespace etvApi
                 });
             });
 
-
+            var cnx = Configuration.GetConnectionString("cadenaConexion");
             services.AddControllers().AddJsonOptions(x =>
              x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
             services.AddDbContext<etvContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("cadenaConexion")));
+                options.UseSqlServer(cnx));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "etv", Version = "v1" });

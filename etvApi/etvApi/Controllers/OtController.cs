@@ -36,7 +36,8 @@ namespace etvApi.Controllers
                 .Include(q => q.IdSucursalNavigation)
                 .Include(q => q.IdTipoTrabajoNavigation)
                 .Include(q => q.IdPersonaNavigation)
-                .Include(q => q.OtDetalle).ToListAsync();
+                .Include(q => q.OtDetalle)
+                .Where(q => q.IdOt == idOt).ToListAsync();
             foreach (var item in data)
             {
                 OtResponceDTO obj = new OtResponceDTO
