@@ -24,6 +24,24 @@ namespace etvApi.Controllers
             return data;
         }
 
+        [HttpGet("{idSucursal}")]
+        public async Task<ActionResult<List<Persona>>> GetByIdSucursal(int idSucursal)
+        {
+            var data = await _context.Usuarios
+                .Include(q => q.IdPersonaNavigation)
+                .Where(q => q.IdSucursal == idSucursal)
+                .Select(q => new Persona
+                {
+                    IdPersona = q.IdPersonaNavigation.IdPersona,
+                    Nombre = q.IdPersonaNavigation.Nombre,
+                    APaterno = q.IdPersonaNavigation.APaterno,
+                    AMaterno = q.IdPersonaNavigation.AMaterno,
+                    Estado = q.IdPersonaNavigation.Estado,
+                    IdCargo = q.IdPersonaNavigation.IdCargo,
+                }).ToListAsync();
+            return data;
+        }
+
         [HttpPost]
         public async Task<ActionResult> Post(PersonaDTO persona)
         {
