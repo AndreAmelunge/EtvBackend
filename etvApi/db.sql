@@ -1,4 +1,6 @@
 --Scaffold-DbContext "Data Source=.;Initial Catalog=etv;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data
+--con doker
+--Scaffold-DbContext "Data Source=.,15000;Initial Catalog=etv;User ID=sa;Password=Control123+" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Data1
 use master
 go
 
